@@ -59,3 +59,43 @@ class Ant(pg.sprite.Sprite):
         # prioritise food to home trails
         # go the other way from home on the trail
         pass
+
+class Home(pg.sprite.Sprite):
+    def __init__(self, game, pos_x, pos_y):
+        super().__init__()
+        self.game = game
+        self.image = pg.Surface((15, 15))
+        self.rect = self.image.get_rect()
+        self.rect.x = pos_x
+        self.rect.y = pos_y
+
+    def update(self):
+        pass
+
+class Crosshair(pg.sprite.Sprite):
+    def __init__(self, game):
+        super().__init__()
+        self.game = game
+        self.image = game.crosshair_image.copy()
+        self.rect = self.image.get_rect()
+
+    def update(self):
+        self.rect.center = pg.mouse.get_pos()
+
+class Food(pg.sprite.Sprite):
+    def __init__(self, game, pos_x, pos_y):
+        super().__init__()
+        self.game = game
+        self.image = pg.Surface((50, 50))
+        self.rect = self.image.get_rect()
+        self.rect.x = pos_x
+        self.rect.y = pos_y
+        self.food_rect_list = []
+        self.food_amount = FOOD_AMOUNT
+
+    def update(self):
+        pass
+
+    def break_up_food(self):
+        # this will take the rect and break it into smaller rects and add them to a list
+        pass
