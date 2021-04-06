@@ -18,14 +18,19 @@ class Game:
         self.ant_image = pg.image.load('ant.png').convert_alpha()
         self.crosshair_image = pg.image.load('cursor.png').convert_alpha()
         self.background = pg.image.load('ground.png').convert_alpha()
+        self.home = pg.image.load('Ant_hole.png').convert_alpha()
 
     def new_game(self):
-        self.ant_home = pg.Rect((WIDTH/2, HEIGHT/2), (15, 15))
+        self.all_sprites = pg.sprite.Group()
+        self.home_location = vec(WIDTH/2, HEIGHT/2)
         self.ant_group = pg.sprite.Group()
         self.home_group = pg.sprite.Group()
         self.crosshair_group = pg.sprite.Group()
-        self.ant = Ant(self, self.ant_home.center)
-        self.ant_group.add(self.ant)
+        self.home = Home(self, self.home_location)
+        self.home_group.add(self.home)
+        for ant in range(self.home.colony_count):
+            self.ant = Ant(self, self.home_location)
+            self.ant_group.add(self.ant)
         self.crosshair = Crosshair(self)
         self.crosshair_group.add(self.crosshair)
         self.background_rect = self.background.get_rect()
@@ -34,6 +39,7 @@ class Game:
 
     def run(self):
         while self.playing:
+            self.dt = self.clock.tick(FPS) / 1000.0  # fix for Python 2.x
             self.clock.tick(FPS)
             self.events()
             if not self.paused:
@@ -46,18 +52,17 @@ class Game:
 
     def update(self):
         #handles the changes and collisions
+        self.home_location.update()
         self.ant_group.update()
         self.crosshair_group.update()
 
     def draw(self):
         #draw the sprites after getting new changes
         pg.display.set_caption("{:.2f}".format(self.clock.get_fps()))
-        #self.screen.fill(WHITE)
         self.screen.blit(self.background, self.background_rect)
-        pg.draw.rect(self.screen, BLACK, self.ant_home)
+        self.home_group.draw(self.screen)
         self.ant_group.draw(self.screen)
         self.crosshair_group.draw(self.screen)
-
         if self.debug:
             pass
         pg.display.flip()
