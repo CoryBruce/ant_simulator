@@ -32,7 +32,19 @@ class Ant(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
         self.pos += self.vel * self.game.dt
-
+        hits = pg.sprite.spritecollide(self, self.game.ant_group, False)
+        for hit in hits:
+            if len(self.searching_marker_list) > 2:
+                if hit != self:
+                    print('hit')
+                    if hit.rect.x > self.rect.x:
+                        self.pos.x -= 0.1
+                    if hit.rect.x < self.rect.x:
+                        self.pos.x += 0.1
+                    if hit.rect.y > self.rect.y:
+                        self.pos.y -= 0.1
+                    if hit.rect.y < self.rect.y:
+                        self.pos.y += 0.1
 
     def search_for_food(self):
         now = pg.time.get_ticks()
