@@ -64,7 +64,8 @@ class Game:
         self.ant_group.draw(self.screen)
         self.crosshair_group.draw(self.screen)
         if self.debug:
-            pass
+            for sprite in self.all_sprites:
+                pg.draw.rect(self.screen, RED, sprite.rect, 1)
         pg.display.flip()
 
     def events(self):

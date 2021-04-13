@@ -28,20 +28,28 @@ class Ant(pg.sprite.Sprite):
         # depending on self.action call methods below
         if self.action == 'searching':
             self.search_for_food()
-        #self.rot = (self.rot * self.game.dt) % 360
-        print(self.rot)
         self.image = pg.transform.rotate(self.game.ant_image.copy(), self.rot - 90)
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
         self.pos += self.vel * self.game.dt
 
+
     def search_for_food(self):
         now = pg.time.get_ticks()
-        if now - self.roam_timer > 3000:
-            roll = random.randint(0, 360)
+        if now - self.roam_timer > 5000:
+            if self.rot == 0:
+                roll = random.randint(0, 360)
+            else:
+                left_max = self.rot - 45
+                right_max = self.rot + 45
+                roll = random.randint(left_max, right_max)
+                roll = roll % 360
             self.rot = roll
             self.vel = vec(ANT_SPEED, 0).rotate(-self.rot)
             self.roam_timer = pg.time.get_ticks()
+            marker = pg.Rect(self.rect.x + (self.rect.x / 2), self.rect.y + (self.rect.y / 2), 10, 10)
+            self.searching_marker_list.append(marker)
+
 
         # leave home in a random direction
         # leave a pheromone rect every 100px
